@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="my-4 text-center" style="color: #6a1b9a;">Bulk Email Sender</h1>
+    <p class="text-center" style="color: #333;">Send bulk emails to your leads with ease. Use the form below to manage your email campaigns efficiently.</p>
+
+    <!-- Bulk Email Sender Form -->
+    <form id="bulk-email-form" class="d-flex flex-column align-items-center mb-5" method="POST" action="{{ url_for('bulk_email_sender') }}" style="max-width: 800px; margin: auto;">
+        <div class="mb-3 w-100">
+            <label for="email-subject" class="form-label" style="color: #6a1b9a;">Email Subject</label>
+            <input type="text" id="email-subject" name="email_subject" class="form-control rounded-lg shadow-sm" placeholder="Enter email subject" style="border: 2px solid #6a1b9a;" required>
+        </div>
+        
+        <div class="mb-3 w-100">
+            <label for="email-body" class="form-label" style="color: #6a1b9a;">Email Body</label>
+            <textarea id="email-body" name="email_body" class="form-control rounded-lg shadow-sm" rows="8" placeholder="Enter the email body here" style="border: 2px solid #6a1b9a;" required></textarea>
+        </div>
+
+        <div class="mb-3 w-100">
+            <label for="email-list" class="form-label" style="color: #6a1b9a;">Email List</label>
+            <textarea id="email-list" name="email_list" class="form-control rounded-lg shadow-sm" rows="8" placeholder="Paste email addresses here, separated by commas or line breaks" style="border: 2px solid #6a1b9a; height: 150px; overflow-y: scroll;" required></textarea>
+        </div>
+
+        <!-- SMTP Configuration Fields -->
+        <div class="mb-3 w-100">
+            <label for="smtp-server" class="form-label" style="color: #6a1b9a;">SMTP Server</label>
+            <input type="text" id="smtp-server" name="smtp_server" class="form-control rounded-lg shadow-sm" placeholder="e.g., smtp.gmail.com" style="border: 2px solid #6a1b9a;" required>
+        </div>
+        
+        <div class="mb-3 w-100">
+            <label for="smtp-port" class="form-label" style="color: #6a1b9a;">SMTP Port</label>
+            <input type="number" id="smtp-port" name="smtp_port" class="form-control rounded-lg shadow-sm" placeholder="e.g., 587" style="border: 2px solid #6a1b9a;" required>
+        </div>
+        
+        <div class="mb-3 w-100">
+            <label for="smtp-username" class="form-label" style="color: #6a1b9a;">SMTP Username</label>
+            <input type="text" id="smtp-username" name="smtp_username" class="form-control rounded-lg shadow-sm" placeholder="Your email address" style="border: 2px solid #6a1b9a;" required>
+        </div>
+        
+        <div class="mb-3 w-100">
+            <label for="smtp-password" class="form-label" style="color: #6a1b9a;">SMTP Password</label>
+            <input type="password" id="smtp-password" name="smtp_password" class="form-control rounded-lg shadow-sm" placeholder="Your email password" style="border: 2px solid #6a1b9a;" required>
+        </div>
+        
+        <button class="btn btn-purple rounded-lg mt-3 shadow-lg" type="submit" style="background-color: #8e24aa; color: #ffffff; width: 100%; max-width: 200px;">
+            <i class="fas fa-paper-plane"></i> Send Emails
+        </button>
+    </form>
+
+    <!-- Confirmation Message -->
+    <div id="confirmation-message" class="text-center mt-5" style="display: none;">
+        <div class="alert alert-success" role="alert">
+            <i class="fas fa-check-circle"></i> Emails have been sent successfully!
+        </div>
+    </div>
+</div>
+
+<style>
+    #bulk-email-form {
+        border-radius: 10px;
+        border: 2px solid #8e24aa;
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
+
+    #bulk-email-form:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Deepened shadow */
+        transform: translateY(-5px); /* Floating effect */
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+    
+    .btn-purple {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-purple:hover {
+        transform: translateY(-3px); /* Floating effect */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Deepened shadow */
+    }
+
+    @media (max-width: 768px) {
+        .btn-purple {
+            width: 100%;
+            font-size: 1.2rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const bulkEmailForm = document.getElementById('bulk-email-form');
+        const confirmationMessage = document.getElementById('confirmation-message');
+
+        bulkEmailForm.addEventListener('submit', () => {
+            confirmationMessage.style.display = 'block'; // Show confirmation message when form is submitted
+        });
+    });
+</script>
+
+{% endblock %}
