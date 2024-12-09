@@ -12,13 +12,16 @@ from flask_mail import Mail, Message
 from email_validator import validate_email, EmailNotValidError
 import phonenumbers
 from phonenumbers import parse, is_valid_number, NumberParseException
+from bs4 import BeautifulSoup
+from collections import Counter
+from nltk.util import ngrams
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-
-
-
-
+# Flask app setup
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Change this to a secure key
+app.secret_key = 'supersecretkey'
 
 # Initialize Flask-Login
 login_manager = LoginManager()
@@ -36,6 +39,7 @@ class User(UserMixin):
 def load_user(user_id):
     return User(user_id) if user_id in users else None
 
+# Helper functions for extracting information
 def extract_info(page_tree, base_url):
     info = {
         'emails': set(),
@@ -44,7 +48,7 @@ def extract_info(page_tree, base_url):
         'social_media': set(),
         'company_name': None,
     }
-
+    # Patterns for extracting data
     email_pattern = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
     phone_pattern = re.compile(r"\+?\d[\d\s\-\(\)]{7,}\d")
     address_patterns = [
@@ -98,51 +102,50 @@ def extract_info(page_tree, base_url):
             if business_name.lower() not in ('top', '10', 'forbes', 'yelp', 'houzz', 'tripadvisor', 'angieslist', 'yellowpages', 'bbb'):
                 info['company_name'] = business_name
 
-    return {k: v for k, v in info.items() if v}
+    # Ensure all sets are converted to lists before returning
+    return {k: list(v) if isinstance(v, set) else v for k, v in info.items()}
 
-def fetch_page_content(url, headers, retries=3):
-    for i in range(retries):
-        try:
-            response = requests.get(url, headers=headers, timeout=10)
-            if response.status_code == 200:
-                return HTMLParser(response.text)
-        except Exception as e:
-            print(f"Attempt {i+1} failed for {url}: {e}")
-            time.sleep(2)
-    return None
+# Define the function to fetch page content
+def fetch_page_content(url, headers):
+    try:
+        response = requests.get(url, headers=headers, timeout=10)  # Added timeout to avoid hanging indefinitely
+        if response.status_code == 200:
+            page_tree = HTMLParser(response.text)  # Use selectolax's HTMLParser
+            return page_tree
+        else:
+            print(f"Failed to retrieve {url} with status code {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"Error fetching content from {url}: {e}")
+        return None
 
-def find_contact_or_about_page(main_tree, base_url, headers):
-    keywords = {"contact", "about", "info", "reach", "email", "support", "help", "customer"}
-    potential_pages = [
-        urljoin(base_url, node.attributes.get('href', ''))
-        for node in main_tree.css('a[href]')
-        if node.attributes.get('href', '') and any(keyword in node.attributes.get('href', '').lower() for keyword in keywords)
-    ]
+# Lead generator page route
+@app.route('/leads-generator')
+@login_required
+def leads_generator():
+    # Retrieve session data to display
+    leads = session.get('leads', [])
+    lead_count = session.get('lead_count', 0)
+    email_count = session.get('email_count', 0)
+    phone_count = session.get('phone_count', 0)
+    address_count = session.get('address_count', 0)
+    social_media_count = session.get('social_media_count', 0)
+    company_name_count = session.get('company_name_count', 0)
 
-    for full_url in potential_pages:
-        page_tree = fetch_page_content(full_url, headers)
-        if page_tree:
-            info = extract_info(page_tree, full_url)
-            if info.get('emails'):
-                return info
-    return {}
+    # Render the template and pass data
+    return render_template(
+        'leads_generator.html',
+        title="Leads Generator",
+        leads=leads,
+        lead_count=lead_count,
+        email_count=email_count,
+        phone_count=phone_count,
+        address_count=address_count,
+        social_media_count=social_media_count,
+        company_name_count=company_name_count
+    )
 
-def is_relevant_site(domain):
-    if domain is None:
-        return False
-    
-    excluded_domains = {
-        'forbes.com', 'top10.com', 'businessinsider.com', 'yelp.com', 
-        'houzz.com', 'tripadvisor.com', 'angieslist.com', 'yellowpages.com', 'bbb.org',
-        'craigslist.org', 'walmart.com', 'amazon.com', 'bestbuy.com', 'homedepot.com',
-        'trustpilot.com', 'yellowpages.co.uk', 'europages.com', 'gelbe-seiten.de', 'apartmentfinder.com',
-        'olx.com.br', 'mercadolivre.com.br', 'zapimoveis.com.br', 'submarino.com.br', 'buscapÃ©.com.br',
-        'gumtree.co.za', 'yellowpages.co.za', 'craigslist.co.za', 'africabusinessdirectory.com', 'za.yellowpages.com',
-        'olx.in', 'justdial.com', 'sulekha.com', 'quikr.com', 'yahoo.co.jp', 'rakuten.co.jp',
-        't.co', 'taobao.com', 'alibaba.com', 'jd.com', 'kaiser.com', 'kakaku.com'
-    }
-    return domain.lower() not in excluded_domains
-
+# Main search route
 @app.route('/search', methods=['POST'])
 @login_required
 def search():
@@ -155,66 +158,332 @@ def search():
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
     response = requests.get(search_url, headers=headers)
-    soup = HTMLParser(response.text)
+    soup = BeautifulSoup(response.text, 'html.parser')
 
     leads = []
 
-    for g in soup.css('div.g'):
-        title_node = g.css_first('h3')
-        link_node = g.css_first('a')
-        snippet_node = g.css_first('span.aCOpRe')
-        date_node = g.css_first('span.f')
-        domain = None
+    # Using ThreadPoolExecutor to fetch data in parallel
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        futures = {}  # Using a dictionary to store futures and their corresponding link_node
+        for g in soup.find_all('div', class_='g'):  # Assuming 'g' is the class for search result items
+            title_node = g.find('h3')  # Get the first h3 element
+            link_node = g.find('a')  # Get the first 'a' element
+            domain = None
+            
+            if title_node:
+                title_node = title_node.text.strip()  # Get the text content of the h3
+            if link_node:
+                link_node = link_node['href']  # Get the 'href' attribute
+                domain = urlparse(link_node).netloc
+
+            if title_node and link_node and domain:
+                future = executor.submit(fetch_page_content, link_node, headers)
+                futures[future] = link_node  # Store link_node in the dictionary with future as the key
+
+    # Handle the results
+    for future in as_completed(futures):
+        page_content = future.result()
+        link_node = futures[future]  # Retrieve the associated link_node for each future
+        if page_content:
+            base_url = urljoin(link_node, '/')
+            info = extract_info(page_content, base_url)
+            leads.append({
+                'link': link_node, 
+                'info': info
+            })
+
+    # Store leads data in session
+    session['leads'] = leads  # Store the leads in session
+    session['lead_count'] = len(leads)
+    session['email_count'] = sum(len(lead['info'].get('emails', [])) for lead in leads)
+    session['phone_count'] = sum(len(lead['info'].get('phone_numbers', [])) for lead in leads)
+    session['address_count'] = sum(len(lead['info'].get('addresses', [])) for lead in leads)
+    session['social_media_count'] = sum(len(lead['info'].get('social_media', [])) for lead in leads)
+    session['company_name_count'] = sum(1 for lead in leads if lead['info'].get('company_name'))
+
+    # Redirect to the leads generator page after updating session
+    return redirect(url_for('leads_generator'))
+
+# SEO
+
+# Optimized function to extract keywords
+def extract_keywords(text):
+    words = re.findall(r'\b\w{3,}\b', text.lower())  # Only words with 3+ characters
+    # Generate n-grams (bigrams, trigrams, etc.)
+    ngrams_list = sum([[' '.join(gram) for gram in ngrams(words, n)] for n in range(2, 6)], [])
+    # Combine words and n-grams
+    phrases = words + ngrams_list
+    stopwords = set(['the', 'in', 'and', 'or', 'is', 'it', 'to', 'from', 'by', 'with', 'for', 'on', 'at', 'as', 'this', 'that', 'these', 'those', 'i', 'we', 'they', 'you', 'll', 'pm', 'am'])
+    return [phrase for phrase in phrases if not any(stopword in phrase for stopword in stopwords)]
+
+def classify_keywords(keywords):
+    short_tail = set()
+    long_tail = set()
+    for keyword in keywords:
+        if len(keyword.split()) == 1:
+            short_tail.add(keyword)
+        else:
+            long_tail.add(keyword)
+    return short_tail, long_tail
+
+def calculate_percentages(keywords, total):
+    return {k: (v / total) * 100 for k, v in keywords.items()}
+
+# Main route for SEO Boost
+@app.route('/seo-boost', methods=['GET', 'POST'])
+def seo_boost():
+    if request.method == 'POST':
+        query = request.form.get('business_name')
+        if not query:
+            return redirect(url_for('seo_boost'))
+
+        search_terms = ["local business", "near me", "business directory"]
+        search_queries = [f"{query} {term}" for term in search_terms]
+        businesses = []
+        all_keywords = []
+
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        }
+
+        # Create a session for reuse
+        session = requests.Session()
+        session.headers.update(headers)
+
+        # Function to scrape page and extract keywords
+        def process_page(href):
+            try:
+                page_response = session.get(href, timeout=30)
+                page_response.raise_for_status()
+                page_soup = BeautifulSoup(page_response.text, 'html.parser')
+
+                # Extract text from paragraphs, meta descriptions, and headings
+                page_text = " ".join([p.get_text() for p in page_soup.find_all(['p', 'meta', 'h1', 'h2', 'h3'])])
+                return extract_keywords(page_text)
+            except Exception as e:
+                print(f"Error scraping {href}: {e}")
+                return []
+
+        # Parallelize requests using ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            futures = []
+            for search_query in search_queries:
+                search_url = f"https://www.google.com/search?q={search_query}"
+
+                try:
+                    response = session.get(search_url)
+                    response.raise_for_status()
+                    soup = BeautifulSoup(response.text, 'html.parser')
+
+                    for g in soup.find_all('div', class_='tF2Cxc'):
+                        link_node = g.find('a')
+                        if link_node:
+                            href = link_node['href']
+                            domain = urlparse(href).netloc
+                            if href and domain:
+                                businesses.append({'url': href, 'domain': domain})
+                                
+                                # Asynchronously scrape the page for keywords
+                                futures.append(executor.submit(process_page, href))
+                
+                except Exception as e:
+                    print(f"Error during Google search scraping: {e}")
+                    continue
+
+            # Collect all keywords from page scraping
+            for future in as_completed(futures):
+                all_keywords.extend(future.result())
+
+        # Count and classify keywords
+        keyword_counts = Counter(all_keywords)
+        keywords = {k: v for k, v in keyword_counts.items() if v > 1}  # Only include keywords that appear more than once
+        total_keywords = sum(keywords.values())
+        keyword_percentages = calculate_percentages(keywords, total_keywords)
+        short_tail, long_tail = classify_keywords(keywords)
+
+        return render_template('seo_boost.html', title="SEO Boost", short_tail=short_tail, long_tail=long_tail, keyword_percentages=keyword_percentages)
+    else:
+        return render_template('seo_boost.html', title="SEO Boost", short_tail=[], long_tail=[], keyword_percentages={})
+
+
+
+
+# COMPETITOR ANALYSIS
+
+# Function to scrape Google search results
+def scrape_google_search(query):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+    search_url = f"https://www.google.com/search?q={query}"
+    response = requests.get(search_url, headers=headers)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, 'html.parser')
+    results = []
+    for g in soup.find_all('div', class_='tF2Cxc'):
+        title = g.find('h3').get_text() if g.find('h3') else 'No title'
+        link = g.find('a')['href'] if g.find('a') else 'No link'
+        domain = urlparse(link).netloc
+        description = g.find('span', class_='aCOpRe').get_text() if g.find('span', class_='aCOpRe') else 'No description'
         
-        if link_node:
-            domain = urlparse(link_node.attributes.get('href', '')).netloc
-
-        if title_node and link_node and domain and is_relevant_site(domain):
-            page_tree = fetch_page_content(link_node.attributes.get('href', ''), headers)
-            if page_tree:
-                base_url = urljoin(link_node.attributes.get('href', ''), '/')
-                info = extract_info(page_tree, base_url)
-                if not info.get('emails'):
-                    contact_about_info = find_contact_or_about_page(page_tree, base_url, headers)
-                    if contact_about_info:
-                        info['emails'] = contact_about_info.get('emails', set())
-
-                leads.append({
-                    'link': link_node.attributes.get('href', ''),
-                    'info': info
+        # Filter out results that seem like lists or directories
+        if "best" not in title.lower() and "directory" not in title.lower() and "list" not in title.lower() and "to know" not in title.lower() and "near me" not in title.lower():
+            if "yelp.com" not in domain and "tripadvisor.com" not in domain and "houzz.com" not in domain:
+                results.append({
+                    'title': title,
+                    'link': link,
+                    'domain': domain,
+                    'description': description
                 })
+    
+    return results
 
-    return render_template('leads_generator.html', title="Leads Generator", leads=leads)
+# Function to get detailed information from a page
+def get_real_info(url, session):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
 
+    try:
+        response = session.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Extract title and meta description
+        title = soup.find('title').get_text() if soup.find('title') else 'No title'
+        description = soup.find('meta', {'name': 'description'})['content'] if soup.find('meta', {'name': 'description'}) else 'No description'
+
+        # Extract specific service elements
+        services = []
+        for service_section in ['service-page', 'services', 'our-services', 'what-we-do']:
+            service_page = soup.find('div', class_=service_section)
+            if service_page:
+                services = [item.get_text().strip() for item in service_page.find_all(['li', 'p']) if item.get_text().strip()]
+                break
+        
+        # Fallback to extracting the first few paragraphs if no specific service section found
+        if not services:
+            paragraphs = soup.find_all('p')
+            services = [paragraph.get_text().strip() for paragraph in paragraphs[:5] if paragraph.get_text().strip()]
+
+        # Extracting business name
+        business_name = soup.find('meta', property='og:site_name')
+        if business_name:
+            business_name = business_name['content']
+        else:
+            business_name = title.split(" - ")[0].strip() if " - " in title else title.split("|")[0].strip() if "|" in title else title.split(".")[0].strip()
+
+        return {
+            'business_name': business_name,
+            'description': description,
+            'services': services
+        }
+    except requests.exceptions.Timeout as e:
+        return {
+            'business_name': 'Error',
+            'description': 'Connection timed out',
+            'services': str(e)
+        }
+    except requests.exceptions.RequestException as e:
+        return {
+            'business_name': 'Error',
+            'description': 'Failed to retrieve data',
+            'services': str(e)
+        }
+
+# Function to rank businesses based on a simple rule
+def rank_businesses(businesses):
+    return sorted(businesses, key=lambda x: (x['description'] != 'No description', len(x['services'])), reverse=True)
+
+# Flask route for competitor analysis
+@app.route('/competitor_analysis', methods=['GET', 'POST'])
+def competitor_analysis():
+    if request.method == 'POST':
+        business_type = request.form.get('business_type')
+        location = request.form.get('location')
+        if not business_type or not location:
+            return redirect(url_for('competitor_analysis'))
+        
+        query = f"{business_type} {location}"
+        search_results = scrape_google_search(query)
+
+        # Create a session with retries
+        session = requests.Session()
+        retry = Retry(connect=5, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+
+        # Using ThreadPoolExecutor to make multiple requests in parallel
+        extracted_info = []
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            futures = {executor.submit(get_real_info, result['link'], session): result for result in search_results}
+
+            for future in as_completed(futures):
+                real_info = future.result()
+                if real_info['business_name'] != 'Error' and real_info['services']:
+                    extracted_info.append(real_info)
+
+        ranked_businesses = rank_businesses(extracted_info)
+        
+        # Ensure at least 10 results
+        while len(ranked_businesses) < 10:
+            ranked_businesses.append({
+                'business_name': 'No business found',
+                'description': 'No description available',
+                'services': ['No services available']
+            })
+
+        return render_template('competitor_analysis.html', title="Competitor Analysis", search_results=ranked_businesses)
+
+    return render_template('competitor_analysis.html', title="Competitor Analysis", search_results=[])
+
+
+#----------------------------------------------------------------
+
+# FIND CONTACTS.
 @app.route('/')
 @login_required
 def index():
-    return render_template('index.html', leads=[])
+    return render_template('dashboard.html', leads=[])
 
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')    
+    # Retrieve data from session
+    lead_count = session.get('lead_count', 0)
+    email_count = session.get('email_count', 0)
+    phone_count = session.get('phone_count', 0)
+    address_count = session.get('address_count', 0)
+    social_media_count = session.get('social_media_count', 0)
+    company_name_count = session.get('company_name_count', 0)
+    
+    # Render the dashboard template, passing the counts
+    return render_template('dashboard.html', lead_count=lead_count, email_count=email_count,
+                           phone_count=phone_count, address_count=address_count,
+                           social_media_count=social_media_count, company_name_count=company_name_count)
 
-@app.route('/leads-generator')
+
+
+
+@app.route('/leads-generator', endpoint='unique_leads_generator')
 @login_required
 def leads_generator():
+    # Your function logic here
     return render_template('leads_generator.html', title="Leads Generator")
+
 
 @app.route('/find-contacts')
 @login_required
 def find_contacts():
     return render_template('find_contacts.html', title="Find Contacts")
 
-@app.route('/social_media_lookup')
+@app.route('/social-media-lookup')
 @login_required
 def social_media_lookup():
     return render_template('social_media_lookup.html')
 
-@app.route('/ai_lead_scoring')
-@login_required
-def ai_lead_scoring():
-    return render_template('ai_lead_scoring.html')
+
 
 @app.route('/help_center')
 @login_required
@@ -314,50 +583,61 @@ def score_lead(lead_info):
     }
 
 
-@app.route('/analyze-leads', methods=['POST'])
-@login_required
-def analyze_leads():
-    leads_text = request.form.get('leads')
-    file = request.files.get('file')
-
-    if file:
-        leads_text = file.read().decode('utf-8')
-
+@app.route('/ai-lead-scoring', methods=['GET', 'POST'])
+def ai_lead_scoring():
     results = []
-    if leads_text:
-        # Simulate AI processing delay
-        delay = random.uniform(2, 5)  # Random delay between 2 to 5 seconds
-        time.sleep(delay)
-        
-        feedback = "AI is analyzing the leads. This may take a moment..."
-        print(feedback)  # This can be logged or shown to the user.
+    if request.method == 'POST':
+        # Get leads from form
+        leads_text = request.form.get('leads', '')
+        file = request.files.get('file')
 
-        # Parse the leads
-        lead_infos = parse_leads(leads_text)
+        if file:
+            leads_text = file.read().decode('utf-8')
 
-        # Process each lead
-        for lead_info in lead_infos:
-            # AI-like decision making
-            score_info = score_lead(lead_info)
-            ai_feedback = f"AI has determined that the lead '{lead_info.get('name', 'No Name')}' has a {score_info['category']} potential."
+        if leads_text.strip():
+            # Simulate AI processing delay
+            delay = random.uniform(2, 5)
+            time.sleep(delay)
 
-            # Example of adding variability in scoring
-            score_info['score'] += random.randint(-5, 5)
+            # Parse the leads
+            lead_infos = parse_leads(leads_text)
 
-            # Append to results
-            results.append({
-                'name': lead_info.get('name', 'No Name'),
-                'score': score_info['score'],
-                'category': score_info['category'],
-                'conversion_rate': score_info['conversion_rate'],
-                'email': ', '.join(lead_info.get('emails', [])),
-                'phone': ', '.join(lead_info.get('phone_numbers', [])),
-                'address': lead_info.get('address', 'None'),
-                'social_media': ', '.join(lead_info.get('social_media', [])),
-                'ai_feedback': ai_feedback
-            })
+            # Process each lead
+            for lead_info in lead_infos:
+                score_info = score_lead(lead_info)
+                score_info['score'] += random.randint(-5, 5)  # Add variability
+                ai_feedback = f"AI has determined that the lead '{lead_info.get('name', 'No Name')}' has a {score_info['category']} potential."
 
+                results.append({
+                    'name': lead_info.get('name', 'No Name'),
+                    'score': score_info['score'],
+                    'category': score_info['category'],
+                    'conversion_rate': score_info['conversion_rate'],
+                    'email': ', '.join(lead_info.get('emails', [])),
+                    'phone': ', '.join(lead_info.get('phone_numbers', [])),
+                    'address': lead_info.get('address', 'None'),
+                    'social_media': ', '.join(lead_info.get('social_media', [])),
+                    'ai_feedback': ai_feedback
+                })
+
+    # Render the template with results
     return render_template('ai_lead_scoring.html', results=results)
+
+def parse_leads(leads_text):
+    """Mock function to parse leads from text."""
+    # Example implementation (to be replaced with real parsing logic)
+    return [
+        {'name': 'John Doe', 'emails': ['john@example.com'], 'phone_numbers': ['123-456-7890'], 'address': '123 Main St', 'social_media': ['@johndoe']}
+    ]
+
+def score_lead(lead_info):
+    """Mock function to score leads."""
+    # Example scoring logic
+    return {
+        'score': random.randint(50, 100),
+        'category': 'High' if random.random() > 0.5 else 'Medium',
+        'conversion_rate': random.uniform(5, 15)
+    }
 
 
 
@@ -456,7 +736,6 @@ def find_linkedin_profile(page_tree, name):
             break
     return linkedin_profile
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -468,8 +747,19 @@ def login():
             # Add user to the session
             if username not in users:
                 users[username] = generate_password_hash(password)
+                
             user = User(username)
             login_user(user)
+
+            # Set default session values to 0 for a fresh session
+            session['lead_count'] = 0
+            session['email_count'] = 0
+            session['phone_count'] = 0
+            session['address_count'] = 0
+            session['social_media_count'] = 0
+            session['company_name_count'] = 0
+            
+            # Redirect to the index or dashboard after login
             return redirect(url_for('index'))
         
         return 'Invalid credentials', 401
@@ -478,8 +768,10 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    logout_user()
-    return redirect(url_for('login'))
+    logout_user()  # Logs out the user
+    session.clear()  # Clears all session data
+    return redirect(url_for('login'))  # Redirects to the login page (or any other page)
+
 
 
 
