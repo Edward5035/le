@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}SalesStorm AI Promoter - SalesStorm AI{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">
+            <i class="fas fa-megaphone text-red-500 mr-2"></i>
+            SalesStorm AI Promoter
+        </h1>
+        <p class="text-lg text-gray-600">
+            Generate high-converting marketing content including emails, social posts, and video scripts
+        </p>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <form method="POST" class="space-y-6">
+            <!-- Niche Selection -->
+            <div>
+                <label for="niche" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-tag mr-1"></i>
+                    Target Niche
+                </label>
+                <select name="niche" id="niche" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                    <option value="">Select your niche...</option>
+                    {% for key, value in niches.items() %}
+                    <option value="{{ key }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Offer Description -->
+            <div>
+                <label for="offer" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-bullhorn mr-1"></i>
+                    Offer/Product Description
+                </label>
+                <textarea name="offer" id="offer" rows="4" required
+                         placeholder="Describe the product or offer you want to promote..."
+                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"></textarea>
+                <p class="text-sm text-gray-500 mt-1">Provide details about the product, benefits, price, etc.</p>
+            </div>
+
+            <!-- Content Options -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-cogs mr-2"></i>
+                    Content Generation Options
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="broadcast_email" name="content_types" value="broadcast_email" checked class="mr-2">
+                        <label for="broadcast_email" class="text-sm text-gray-700">Broadcast Email</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="social_post" name="content_types" value="social_post" checked class="mr-2">
+                        <label for="social_post" class="text-sm text-gray-700">Social Media Posts</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="video_script" name="content_types" value="video_script" checked class="mr-2">
+                        <label for="video_script" class="text-sm text-gray-700">Video Script</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div class="bg-blue-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-sliders-h mr-2"></i>
+                    Advanced Settings
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="tone" class="block text-sm font-medium text-gray-700 mb-1">Content Tone</label>
+                        <select name="tone" id="tone" class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                            <option value="professional">Professional</option>
+                            <option value="friendly" selected>Friendly</option>
+                            <option value="urgent">Urgent</option>
+                            <option value="casual">Casual</option>
+                            <option value="authoritative">Authoritative</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="urgency_level" class="block text-sm font-medium text-gray-700 mb-1">Urgency Level</label>
+                        <select name="urgency_level" id="urgency_level" class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                            <option value="extreme">Extreme</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label for="target_audience" class="block text-sm font-medium text-gray-700 mb-1">Target Audience (Optional)</label>
+                    <input type="text" name="target_audience" id="target_audience"
+                           placeholder="e.g., entrepreneurs, marketers, beginners..."
+                           class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                </div>
+            </div>
+
+            <!-- AI Enhancement -->
+            <div class="bg-purple-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-robot mr-2"></i>
+                    AI Enhancement Options
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="use_emojis" name="enhancements" value="use_emojis" checked class="mr-2">
+                        <label for="use_emojis" class="text-sm text-gray-700">Include emojis for engagement</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="add_hooks" name="enhancements" value="add_hooks" checked class="mr-2">
+                        <label for="add_hooks" class="text-sm text-gray-700">Add attention-grabbing hooks</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="include_stats" name="enhancements" value="include_stats" class="mr-2">
+                        <label for="include_stats" class="text-sm text-gray-700">Include compelling statistics</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="social_proof" name="enhancements" value="social_proof" checked class="mr-2">
+                        <label for="social_proof" class="text-sm text-gray-700">Add social proof elements</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors inline-flex items-center">
+                    <i class="fas fa-megaphone mr-2"></i>
+                    Generate Marketing Content
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Content Types Preview -->
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <i class="fas fa-envelope text-3xl text-blue-500 mb-3"></i>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Broadcast Email</h3>
+            <p class="text-sm text-gray-600">High-converting email copy with subject lines and preview text</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <i class="fas fa-share-alt text-3xl text-green-500 mb-3"></i>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Social Media Posts</h3>
+            <p class="text-sm text-gray-600">Platform-optimized content for Facebook, Twitter, and LinkedIn</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <i class="fas fa-video text-3xl text-purple-500 mb-3"></i>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Video Scripts</h3>
+            <p class="text-sm text-gray-600">Engaging scripts for short-form video content and demonstrations</p>
+        </div>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="mt-12 bg-yellow-50 border-l-4 border-yellow-400 p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3">
+            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+            Pro Tips for Better Results
+        </h3>
+        <ul class="space-y-2 text-sm text-gray-700">
+            <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mr-2 mt-0.5"></i>
+                Be specific about your offer's unique value proposition
+            </li>
+            <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mr-2 mt-0.5"></i>
+                Include price points and bonuses in your description
+            </li>
+            <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mr-2 mt-0.5"></i>
+                Mention any urgency or scarcity elements
+            </li>
+            <li class="flex items-start">
+                <i class="fas fa-check text-green-500 mr-2 mt-0.5"></i>
+                Describe your target audience's main pain points
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

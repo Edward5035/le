@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Commission Activator - SalesStorm AI{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">
+            <i class="fas fa-rocket text-secondary mr-2"></i>
+            Commission Activator System
+        </h1>
+        <p class="text-lg text-gray-600">
+            Create high-converting landing pages with scarcity timers and bonus blocks
+        </p>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <form method="POST" class="space-y-6">
+            <!-- Affiliate Link -->
+            <div>
+                <label for="affiliate_link" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-link mr-1"></i>
+                    Affiliate/Product Link
+                </label>
+                <input type="url" name="affiliate_link" id="affiliate_link" required
+                       placeholder="https://example.com/your-affiliate-link"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent">
+                <p class="text-sm text-gray-500 mt-1">Enter the link you want to promote</p>
+            </div>
+
+            <!-- Niche Selection -->
+            <div>
+                <label for="niche" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-tag mr-1"></i>
+                    Target Niche
+                </label>
+                <select name="niche" id="niche" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent">
+                    <option value="">Select your niche...</option>
+                    {% for key, value in niches.items() %}
+                    <option value="{{ key }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Activation Settings -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-cogs mr-2"></i>
+                    Activation Settings
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="scarcity_hours" class="block text-sm font-medium text-gray-700 mb-1">Scarcity Timer (hours)</label>
+                        <select name="scarcity_hours" id="scarcity_hours" class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-secondary">
+                            <option value="6">6 Hours</option>
+                            <option value="12">12 Hours</option>
+                            <option value="24" selected>24 Hours</option>
+                            <option value="48">48 Hours</option>
+                            <option value="72">72 Hours</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="bonus_style" class="block text-sm font-medium text-gray-700 mb-1">Bonus Block Style</label>
+                        <select name="bonus_style" id="bonus_style" class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-secondary">
+                            <option value="minimal">Minimal</option>
+                            <option value="detailed" selected>Detailed</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Customization -->
+            <div class="bg-blue-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-palette mr-2"></i>
+                    Page Customization
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="headline" class="block text-sm font-medium text-gray-700 mb-1">Custom Headline (Optional)</label>
+                        <input type="text" name="headline" id="headline"
+                               placeholder="Leave blank for auto-generated"
+                               class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-secondary">
+                    </div>
+                    <div>
+                        <label for="color_scheme" class="block text-sm font-medium text-gray-700 mb-1">Color Scheme</label>
+                        <select name="color_scheme" id="color_scheme" class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-secondary">
+                            <option value="blue">Professional Blue</option>
+                            <option value="green">Money Green</option>
+                            <option value="red">Urgency Red</option>
+                            <option value="purple">Premium Purple</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="bg-secondary hover:bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors inline-flex items-center">
+                    <i class="fas fa-rocket mr-2"></i>
+                    Activate Commission Page
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Features Preview -->
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <i class="fas fa-clock text-3xl text-red-500 mb-3"></i>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Scarcity Timer</h3>
+            <p class="text-sm text-gray-600">Real-time countdown to create urgency and drive immediate action</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <i class="fas fa-gift text-3xl text-yellow-500 mb-3"></i>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Bonus Blocks</h3>
+            <p class="text-sm text-gray-600">Pre-built bonus sections with high-value offers and stack presentation</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <i class="fas fa-mouse-pointer text-3xl text-green-500 mb-3"></i>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Optimized CTAs</h3>
+            <p class="text-sm text-gray-600">Strategic button placement and copy for maximum conversion rates</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

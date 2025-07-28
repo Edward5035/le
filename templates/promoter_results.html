@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}Marketing Content Generated - SalesStorm AI{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">
+            <i class="fas fa-megaphone text-red-500 mr-2"></i>
+            Marketing Content Generated Successfully!
+        </h1>
+        <p class="text-lg text-gray-600">
+            Your promotional content for <span class="font-semibold text-red-500">{{ niches[niche] }}</span>
+        </p>
+        <div class="mt-4 inline-flex items-center bg-green-100 text-green-800 px-4 py-2 rounded-full">
+            <i class="fas fa-check-circle mr-2"></i>
+            Ready to deploy across all channels
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-center space-x-4 mb-8">
+        <a href="{{ url_for('salesstorm_promoter') }}" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition-colors">
+            <i class="fas fa-plus mr-2"></i>Generate More Content
+        </a>
+        <button onclick="copyAllContent()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-colors">
+            <i class="fas fa-copy mr-2"></i>Copy All Content
+        </button>
+        <button onclick="exportContent()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
+            <i class="fas fa-download mr-2"></i>Export Content
+        </button>
+    </div>
+
+    <!-- Broadcast Email -->
+    <div class="bg-white rounded-lg shadow-lg mb-8">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4 rounded-t-lg">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fas fa-envelope mr-2"></i>
+                Broadcast Email
+            </h2>
+        </div>
+        <div class="p-6">
+            <div class="bg-gray-50 rounded-lg p-6 mb-4">
+                <div class="mb-4">
+                    <label class="text-sm font-medium text-gray-600">Subject Line:</label>
+                    <p class="text-lg font-semibold text-gray-800">{{ content.broadcast_email.subject }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="text-sm font-medium text-gray-600">Email Body:</label>
+                    <div class="bg-white border rounded-lg p-4 mt-2">
+                        <pre class="whitespace-pre-wrap text-gray-800">{{ content.broadcast_email.body }}</pre>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <button onclick="copyEmailContent()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
+                    <i class="fas fa-copy mr-1"></i>Copy Email
+                </button>
+                <div class="space-x-2">
+                    <button onclick="previewEmail()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors">
+                        <i class="fas fa-eye mr-1"></i>Preview
+                    </button>
+                    <button onclick="sendTestEmail()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors">
+                        <i class="fas fa-paper-plane mr-1"></i>Send Test
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Media Posts -->
+    <div class="bg-white rounded-lg shadow-lg mb-8">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4 rounded-t-lg">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fas fa-share-alt mr-2"></i>
+                Social Media Posts
+            </h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Facebook Post -->
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fab fa-facebook text-2xl text-blue-600 mr-3"></i>
+                        <h3 class="text-lg font-semibold text-gray-800">Facebook Post</h3>
+                    </div>
+                    <div class="bg-white border rounded-lg p-4 mb-4">
+                        <pre class="whitespace-pre-wrap text-gray-800 text-sm">{{ content.social_post.facebook }}</pre>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="copyContent('facebook')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                            <i class="fas fa-copy mr-1"></i>Copy
+                        </button>
+                        <button onclick="shareToFacebook()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                            <i class="fab fa-facebook mr-1"></i>Share
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Twitter Post -->
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fab fa-twitter text-2xl text-blue-400 mr-3"></i>
+                        <h3 class="text-lg font-semibold text-gray-800">Twitter/X Post</h3>
+                    </div>
+                    <div class="bg-white border rounded-lg p-4 mb-4">
+                        <pre class="whitespace-pre-wrap text-gray-800 text-sm">{{ content.social_post.twitter }}</pre>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="copyContent('twitter')" class="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded text-sm transition-colors">
+                            <i class="fas fa-copy mr-1"></i>Copy
+                        </button>
+                        <button onclick="shareToTwitter()" class="bg-blue-300 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm transition-colors">
+                            <i class="fab fa-twitter mr-1"></i>Tweet
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Script -->
+    <div class="bg-white rounded-lg shadow-lg mb-8">
+        <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-4 rounded-t-lg">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fas fa-video mr-2"></i>
+                Short-Form Video Script
+            </h2>
+        </div>
+        <div class="p-6">
+            <div class="bg-gray-50 rounded-lg p-6 mb-4">
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-600">Hook (First 3 seconds):</label>
+                        <div class="bg-yellow-100 border-l-4 border-yellow-400 p-3 mt-1">
+                            <p class="text-gray-800 font-semibold">{{ content.video_script.hook }}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-600">Main Content:</label>
+                        <div class="bg-white border rounded-lg p-4 mt-1">
+                            <pre class="whitespace-pre-wrap text-gray-800">{{ content.video_script.content }}</pre>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-600">Call to Action:</label>
+                        <div class="bg-green-100 border-l-4 border-green-400 p-3 mt-1">
+                            <p class="text-gray-800 font-semibold">{{ content.video_script.cta }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <button onclick="copyVideoScript()" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors">
+                    <i class="fas fa-copy mr-1"></i>Copy Script
+                </button>
+                <div class="space-x-2">
+                    <button onclick="downloadScript()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors">
+                        <i class="fas fa-download mr-1"></i>Download
+                    </button>
+                    <button onclick="generateVariations()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded transition-colors">
+                        <i class="fas fa-random mr-1"></i>Generate Variations
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Calendar Suggestion -->
+    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg text-white p-8">
+        <h3 class="text-xl font-bold mb-4">
+            <i class="fas fa-calendar-alt mr-2"></i>
+            Suggested Content Calendar
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white/20 rounded-lg p-4">
+                <h4 class="font-semibold mb-2">Day 1: Launch</h4>
+                <p class="text-sm">Send broadcast email to your list</p>
+            </div>
+            <div class="bg-white/20 rounded-lg p-4">
+                <h4 class="font-semibold mb-2">Day 2-3: Social</h4>
+                <p class="text-sm">Post on Facebook and Twitter</p>
+            </div>
+            <div class="bg-white/20 rounded-lg p-4">
+                <h4 class="font-semibold mb-2">Day 4-7: Video</h4>
+                <p class="text-sm">Create and share video content</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyAllContent() {
+    const allContent = {
+        email: `{{ content.broadcast_email.subject }}\n\n{{ content.broadcast_email.body }}`,
+        facebook: `{{ content.social_post.facebook }}`,
+        twitter: `{{ content.social_post.twitter }}`,
+        video: `Hook: {{ content.video_script.hook }}\n\nContent: {{ content.video_script.content }}\n\nCTA: {{ content.video_script.cta }}`
+    };
+    
+    const fullContent = `BROADCAST EMAIL:\n${allContent.email}\n\n---\n\nFACEBOOK POST:\n${allContent.facebook}\n\n---\n\nTWITTER POST:\n${allContent.twitter}\n\n---\n\nVIDEO SCRIPT:\n${allContent.video}`;
+    
+    navigator.clipboard.writeText(fullContent).then(() => {
+        alert('All content copied to clipboard!');
+    });
+}
+
+function copyEmailContent() {
+    const emailContent = `Subject: {{ content.broadcast_email.subject }}\n\n{{ content.broadcast_email.body }}`;
+    navigator.clipboard.writeText(emailContent).then(() => {
+        alert('Email content copied to clipboard!');
+    });
+}
+
+function copyContent(platform) {
+    let content = '';
+    if (platform === 'facebook') {
+        content = `{{ content.social_post.facebook }}`;
+    } else if (platform === 'twitter') {
+        content = `{{ content.social_post.twitter }}`;
+    }
+    
+    navigator.clipboard.writeText(content).then(() => {
+        alert(`${platform.charAt(0).toUpperCase() + platform.slice(1)} post copied to clipboard!`);
+    });
+}
+
+function copyVideoScript() {
+    const script = `Hook: {{ content.video_script.hook }}\n\nContent: {{ content.video_script.content }}\n\nCTA: {{ content.video_script.cta }}`;
+    navigator.clipboard.writeText(script).then(() => {
+        alert('Video script copied to clipboard!');
+    });
+}
+
+function previewEmail() {
+    alert('Email preview feature coming soon!');
+}
+
+function sendTestEmail() {
+    alert('Test email feature coming soon!');
+}
+
+function shareToFacebook() {
+    const text = encodeURIComponent(`{{ content.social_post.facebook }}`);
+    window.open(`https://www.facebook.com/sharer/sharer.php?quote=${text}`);
+}
+
+function shareToTwitter() {
+    const text = encodeURIComponent(`{{ content.social_post.twitter }}`);
+    window.open(`https://twitter.com/intent/tweet?text=${text}`);
+}
+
+function downloadScript() {
+    const script = `Hook: {{ content.video_script.hook }}\n\nContent: {{ content.video_script.content }}\n\nCTA: {{ content.video_script.cta }}`;
+    const blob = new Blob([script], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'video-script.txt';
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+function generateVariations() {
+    alert('Variation generation feature coming soon!');
+}
+
+function exportContent() {
+    const allContent = `SALESSTORM AI MARKETING CONTENT\n\nNiche: {{ niches[niche] }}\nOffer: {{ offer }}\nGenerated: ${new Date().toLocaleString()}\n\n---\n\nBROADCAST EMAIL:\nSubject: {{ content.broadcast_email.subject }}\n\n{{ content.broadcast_email.body }}\n\n---\n\nFACEBOOK POST:\n{{ content.social_post.facebook }}\n\n---\n\nTWITTER POST:\n{{ content.social_post.twitter }}\n\n---\n\nVIDEO SCRIPT:\nHook: {{ content.video_script.hook }}\n\nContent: {{ content.video_script.content }}\n\nCTA: {{ content.video_script.cta }}`;
+    
+    const blob = new Blob([allContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'salesstorm-marketing-content.txt';
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+</script>
+{% endblock %}
