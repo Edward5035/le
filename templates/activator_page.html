@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}Limited Time Offer - {{ niches[niche] }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Scarcity Bar -->
+    <div class="bg-red-600 text-white p-4 rounded-lg mb-6 text-center">
+        <div class="flex items-center justify-center space-x-4">
+            <i class="fas fa-exclamation-triangle text-xl"></i>
+            <div>
+                <p class="text-lg font-bold">⚠️ LIMITED TIME OFFER EXPIRES IN:</p>
+                <div id="countdown" class="text-2xl font-mono font-bold mt-2">
+                    <span id="hours">{{ scarcity_timer }}</span>:
+                    <span id="minutes">00</span>:
+                    <span id="seconds">00</span>
+                </div>
+            </div>
+            <i class="fas fa-exclamation-triangle text-xl"></i>
+        </div>
+    </div>
+
+    <!-- Main Headline -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">
+            🚀 {{ niches[niche] }} Breakthrough Revealed!
+        </h1>
+        <p class="text-xl text-gray-600 mb-6">
+            The Secret Strategy That's Generated Over $50,000+ in {{ niches[niche] }} Commissions
+        </p>
+        <div class="inline-flex items-center bg-green-100 text-green-800 px-6 py-3 rounded-full text-lg font-semibold">
+            <i class="fas fa-check-circle mr-2"></i>
+            Proven Results • Real People • Real Profits
+        </div>
+    </div>
+
+    <!-- Video/Image Placeholder -->
+    <div class="bg-gray-900 rounded-lg mb-8 aspect-video flex items-center justify-center">
+        <div class="text-center text-white">
+            <i class="fas fa-play-circle text-6xl mb-4 opacity-75"></i>
+            <p class="text-xl">Watch the {{ niches[niche] }} Profit Demo</p>
+            <p class="text-sm opacity-75">Click to see exactly how this works</p>
+        </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+            What You'll Get With This {{ niches[niche] }} System:
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1 text-lg"></i>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Complete {{ niches[niche] }} Blueprint</h3>
+                        <p class="text-gray-600 text-sm">Step-by-step system that works for beginners and pros</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1 text-lg"></i>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">DFY Templates & Tools</h3>
+                        <p class="text-gray-600 text-sm">Ready-to-use materials that you can deploy immediately</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1 text-lg"></i>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">24/7 Automated Income</h3>
+                        <p class="text-gray-600 text-sm">Set it up once, profit while you sleep</p>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1 text-lg"></i>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Exclusive Training Videos</h3>
+                        <p class="text-gray-600 text-sm">Over-the-shoulder tutorials showing you everything</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1 text-lg"></i>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Private Community Access</h3>
+                        <p class="text-gray-600 text-sm">Connect with other successful {{ niches[niche] }} marketers</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-3 mt-1 text-lg"></i>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">60-Day Money Back Guarantee</h3>
+                        <p class="text-gray-600 text-sm">Risk-free trial with full refund protection</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bonus Stack -->
+    <div class="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+            🎁 EXCLUSIVE BONUSES (Limited Time Only)
+        </h2>
+        <div class="space-y-4">
+            {% for bonus in bonuses %}
+            <div class="bg-white border-2 border-yellow-400 rounded-lg p-4 flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-gray-800">{{ bonus.name }}</h3>
+                    <p class="text-sm text-gray-600">Normally sold separately</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-2xl font-bold text-yellow-600">{{ bonus.value }}</p>
+                    <p class="text-sm text-green-600 font-semibold">FREE Today</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-6 bg-yellow-200 rounded-lg p-4">
+            <p class="text-xl font-bold text-gray-800">
+                Total Bonus Value: 
+                <span class="text-2xl text-yellow-600">
+                    ${{ bonuses|sum(attribute='value')|replace('$', '')|int }}
+                </span>
+            </p>
+            <p class="text-sm text-gray-600">Yours FREE when you act now!</p>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center space-y-6">
+        <div class="bg-green-100 border-2 border-green-300 rounded-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Ready to Start Your {{ niches[niche] }} Success Story?</h2>
+            <p class="text-lg text-gray-600 mb-6">Join thousands of successful marketers already profiting with this system</p>
+            
+            <a href="{{ affiliate_link }}" target="_blank" 
+               class="bg-green-500 hover:bg-green-600 text-white px-12 py-4 rounded-lg text-xl font-bold transition-colors inline-block shadow-lg transform hover:scale-105">
+                🚀 GET INSTANT ACCESS NOW!
+            </a>
+            
+            <p class="text-sm text-gray-600 mt-4">
+                <i class="fas fa-lock mr-1"></i>
+                Secure checkout • Instant access • 60-day guarantee
+            </p>
+        </div>
+        
+        <!-- Urgency Reminder -->
+        <div class="bg-red-100 border-2 border-red-300 rounded-lg p-4">
+            <p class="text-red-700 font-semibold">
+                ⚠️ This special price and bonus package expires when the timer hits zero!
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Countdown Timer
+function startCountdown() {
+    const totalHours = {{ scarcity_timer }};
+    const endTime = new Date().getTime() + (totalHours * 60 * 60 * 1000);
+    
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = endTime - now;
+        
+        if (distance > 0) {
+            const hours = Math.floor(distance / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        } else {
+            document.getElementById('countdown').innerHTML = '<span class="text-red-300">EXPIRED</span>';
+        }
+    }
+    
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
+
+// Start countdown when page loads
+document.addEventListener('DOMContentLoaded', startCountdown);
+</script>
+{% endblock %}

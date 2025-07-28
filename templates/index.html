@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}SalesStorm AI - Dashboard{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-primary to-secondary rounded-lg text-white p-8 mb-8">
+    <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4">
+            <i class="fas fa-bolt mr-2"></i>
+            Welcome to SalesStorm AI
+        </h1>
+        <p class="text-xl mb-6 opacity-90">
+            Your complete AI-powered affiliate marketing toolkit
+        </p>
+        <div class="inline-flex items-center bg-white/20 rounded-full px-4 py-2">
+            <i class="fas fa-rocket mr-2"></i>
+            <span>Generate. Convert. Profit.</span>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <i class="fas fa-magic text-3xl text-primary mb-3"></i>
+        <h3 class="text-lg font-semibold text-gray-700">AI Storm Builder</h3>
+        <p class="text-sm text-gray-500">Generate complete sales funnels</p>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <i class="fas fa-rocket text-3xl text-secondary mb-3"></i>
+        <h3 class="text-lg font-semibold text-gray-700">Commission Activator</h3>
+        <p class="text-sm text-gray-500">High-converting landing pages</p>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <i class="fas fa-gift text-3xl text-accent mb-3"></i>
+        <h3 class="text-lg font-semibold text-gray-700">Bonus Vault</h3>
+        <p class="text-sm text-gray-500">Unique delivery systems</p>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <i class="fas fa-megaphone text-3xl text-red-500 mb-3"></i>
+        <h3 class="text-lg font-semibold text-gray-700">AI Promoter</h3>
+        <p class="text-sm text-gray-500">Marketing content creation</p>
+    </div>
+</div>
+
+<!-- Main Features -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- AI Storm Builder -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fas fa-magic mr-2"></i>
+                AI Storm Builder
+            </h2>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 mb-4">
+                Generate complete sales funnels including profit pages, bonus pages, and follow-up email sequences.
+            </p>
+            <ul class="space-y-2 mb-6">
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Profit page with CTA buttons
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Bonus/bridge page
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    3 follow-up emails
+                </li>
+            </ul>
+            <a href="{{ url_for('ai_storm') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors inline-block">
+                Start Building <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Commission Activator -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fas fa-rocket mr-2"></i>
+                Commission Activator
+            </h2>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 mb-4">
+                Create high-converting landing pages with scarcity timers and bonus blocks.
+            </p>
+            <ul class="space-y-2 mb-6">
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Scarcity countdown timer
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Pre-built bonus blocks
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Optimized CTA placement
+                </li>
+            </ul>
+            <a href="{{ url_for('commission_activator') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-colors inline-block">
+                Activate Now <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Bonus Delivery Vault -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fas fa-gift mr-2"></i>
+                Bonus Delivery Vault
+            </h2>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 mb-4">
+                Generate unique bonus delivery pages with timed unlock systems.
+            </p>
+            <ul class="space-y-2 mb-6">
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    UUID-based unique links
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Timed unlock countdown
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Auto-loading bonuses
+                </li>
+            </ul>
+            <button onclick="generateBonusLink()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg transition-colors">
+                Generate Link <i class="fas fa-link ml-1"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- SalesStorm AI Promoter -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fas fa-megaphone mr-2"></i>
+                SalesStorm AI Promoter
+            </h2>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 mb-4">
+                Generate marketing content including emails, social posts, and video scripts.
+            </p>
+            <ul class="space-y-2 mb-6">
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Broadcast email content
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Social media posts
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-check text-green-500 mr-2"></i>
+                    Video scripts
+                </li>
+            </ul>
+            <a href="{{ url_for('salesstorm_promoter') }}" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition-colors inline-block">
+                Start Promoting <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Niche Presets Section -->
+<div class="mt-12">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+        <i class="fas fa-layer-group mr-2"></i>
+        Niche Storm Presets
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for key, value in niches.items() %}
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+            <div class="bg-gradient-to-r from-gray-600 to-gray-700 px-4 py-3">
+                <h3 class="text-white font-semibold">{{ value }}</h3>
+            </div>
+            <div class="p-4">
+                <p class="text-gray-600 text-sm mb-4">
+                    Pre-built templates and content for the {{ value.lower() }} niche.
+                </p>
+                <a href="{{ url_for('niche_presets', niche_name=key) }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition-colors text-sm">
+                    Explore Presets
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mt-12 bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">
+        <i class="fas fa-lightning-bolt mr-2"></i>
+        Quick Actions
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <button onclick="generateBonusLink()" class="bg-primary hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition-colors">
+            <i class="fas fa-link mr-2"></i>
+            Generate Bonus Link
+        </button>
+        <a href="{{ url_for('ai_storm') }}" class="bg-secondary hover:bg-purple-600 text-white px-4 py-3 rounded-lg transition-colors text-center">
+            <i class="fas fa-magic mr-2"></i>
+            Quick AI Storm
+        </a>
+        <a href="{{ url_for('commission_activator') }}" class="bg-accent hover:bg-yellow-600 text-white px-4 py-3 rounded-lg transition-colors text-center">
+            <i class="fas fa-rocket mr-2"></i>
+            Quick Activator
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function generateBonusLink() {
+    fetch('/api/generate-bonus-link')
+        .then(response => response.json())
+        .then(data => {
+            const modal = `
+                <div id="bonus-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                        <h3 class="text-lg font-bold mb-4">Bonus Link Generated!</h3>
+                        <p class="text-gray-600 mb-4">Your unique bonus delivery link:</p>
+                        <div class="bg-gray-100 p-3 rounded border mb-4">
+                            <code class="text-sm break-all">${data.bonus_url}</code>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="copyToClipboard('${data.bonus_url}')" class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600">
+                                Copy Link
+                            </button>
+                            <a href="${data.bonus_url}" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                                Visit Page
+                            </a>
+                            <button onclick="document.getElementById('bonus-modal').remove()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modal);
+        });
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Link copied to clipboard!');
+    });
+}
+</script>
+{% endblock %}
