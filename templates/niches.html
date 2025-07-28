@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+
+{% block title %}Niche Presets - SalesStorm AI{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4 fade-in">
+    <h1 class="h2 mb-0">
+        <i class="fas fa-layers text-purple me-2"></i>
+        Niche Presets
+    </h1>
+    <p class="text-muted">Ready-to-deploy templates for high-converting niches</p>
+</div>
+
+<div class="row g-4 mb-5">
+    {% for niche in niches %}
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="niche-card card border-0 h-100 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="niche-icon">
+                        {% if 'Money' in niche.name %}
+                            <i class="fas fa-dollar-sign text-success"></i>
+                        {% elif 'Freelancing' in niche.name %}
+                            <i class="fas fa-laptop-code text-primary"></i>
+                        {% elif 'AI Tools' in niche.name %}
+                            <i class="fas fa-robot text-info"></i>
+                        {% elif 'Local Business' in niche.name %}
+                            <i class="fas fa-store text-warning"></i>
+                        {% elif 'Health' in niche.name %}
+                            <i class="fas fa-heartbeat text-danger"></i>
+                        {% else %}
+                            <i class="fas fa-chart-line text-purple"></i>
+                        {% endif %}
+                    </div>
+                    <span class="badge bg-primary">{{ niche.templates }} Templates</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title mb-2">{{ niche.name }}</h5>
+                <p class="card-text text-muted small mb-3">{{ niche.description }}</p>
+                
+                <div class="niche-stats mb-3">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <h6 class="text-success mb-0">{{ niche.conversion_rate }}</h6>
+                                <small class="text-muted">Avg CVR</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <h6 class="text-primary mb-0">{{ niche.templates }}</h6>
+                                <small class="text-muted">Templates</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary preview-niche" 
+                            data-niche="{{ niche.name.lower().replace(' ', '-') }}"
+                            data-niche-name="{{ niche.name }}">
+                        <i class="fas fa-eye me-2"></i>
+                        Preview Templates
+                    </button>
+                    <button class="btn btn-outline-success deploy-niche" 
+                            data-niche="{{ niche.name.lower().replace(' ', '-') }}"
+                            data-niche-name="{{ niche.name }}">
+                        <i class="fas fa-rocket me-2"></i>
+                        Deploy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Featured Templates -->
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-star text-warning me-2"></i>
+                    Featured Templates
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="featured-template text-center">
+                            <div class="template-icon mb-3">
+                                <i class="fas fa-trophy text-warning"></i>
+                            </div>
+                            <h6 class="mb-2">Ultimate Conversion Template</h6>
+                            <p class="text-muted small mb-3">Highest converting template across all niches</p>
+                            <span class="badge bg-warning">15.2% CVR</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="featured-template text-center">
+                            <div class="template-icon mb-3">
+                                <i class="fas fa-fire text-danger"></i>
+                            </div>
+                            <h6 class="mb-2">Viral Marketing Template</h6>
+                            <p class="text-muted small mb-3">Perfect for social media campaigns</p>
+                            <span class="badge bg-danger">850K+ Shares</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="featured-template text-center">
+                            <div class="template-icon mb-3">
+                                <i class="fas fa-mobile-alt text-primary"></i>
+                            </div>
+                            <h6 class="mb-2">Mobile-First Template</h6>
+                            <p class="text-muted small mb-3">Optimized for mobile conversions</p>
+                            <span class="badge bg-primary">78% Mobile CVR</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="featured-template text-center">
+                            <div class="template-icon mb-3">
+                                <i class="fas fa-clock text-info"></i>
+                            </div>
+                            <h6 class="mb-2">Quick Launch Template</h6>
+                            <p class="text-muted small mb-3">Deploy in under 5 minutes</p>
+                            <span class="badge bg-info">2 Min Setup</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Niche Preview Modal -->
+<div class="modal fade" id="nichePreviewModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-layers text-purple me-2"></i>
+                    <span id="modal-niche-name">Niche Templates</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="niche-preview-content">
+                    <!-- Preview content will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="deploy-selected-niche">
+                    <i class="fas fa-rocket me-2"></i>
+                    Deploy This Niche
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Deploy Success Modal -->
+<div class="modal fade" id="deploySuccessModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Niche Deployed Successfully!
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deploy-success-content">
+                    <!-- Success content will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="view-deployed-niche">
+                    <i class="fas fa-external-link-alt me-2"></i>
+                    View Live Site
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Preview niche functionality
+    $('.preview-niche').on('click', function() {
+        const nicheSlug = $(this).data('niche');
+        const nicheName = $(this).data('niche-name');
+        showNichePreview(nicheSlug, nicheName);
+    });
+    
+    // Deploy niche functionality
+    $('.deploy-niche').on('click', function() {
+        const nicheSlug = $(this).data('niche');
+        const nicheName = $(this).data('niche-name');
+        deployNiche(nicheSlug, nicheName);
+    });
+});
+
+function showNichePreview(nicheSlug, nicheName) {
+    $('#modal-niche-name').text(`${nicheName} Templates`);
+    
+    // Show loading
+    showLoading();
+    
+    $.ajax({
+        url: `/api/niches/${nicheSlug}`,
+        method: 'GET',
+        success: function(response) {
+            hideLoading();
+            renderNichePreview(response);
+            $('#nichePreviewModal').modal('show');
+        },
+        error: function() {
+            hideLoading();
+            showAlert('danger', 'Failed to load niche preview.');
+        }
+    });
+}
+
+function renderNichePreview(nicheData) {
+    const previewContent = `
+        <div class="niche-preview">
+            <div class="alert alert-info mb-4">
+                <h6 class="mb-2">📋 ${nicheData.niche} Template Preview</h6>
+                <p class="mb-0">Here's a sample of what your deployed template will look like:</p>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 bg-light">
+                        <div class="card-header bg-transparent">
+                            <h6 class="mb-0">AI-Generated Template Copy</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="template-preview-text">
+                                ${nicheData.template_preview}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <h6 class="mb-3">Template Features:</h6>
+                    <ul class="list-unstyled">
+                        ${nicheData.features.map(feature => `
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                ${feature}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <div class="template-stats">
+                        <h6 class="mb-3">Performance Stats:</h6>
+                        <div class="stat-item mb-2">
+                            <div class="d-flex justify-content-between">
+                                <small>Conversion Rate</small>
+                                <small class="text-success fw-bold">8.5%</small>
+                            </div>
+                        </div>
+                        <div class="stat-item mb-2">
+                            <div class="d-flex justify-content-between">
+                                <small>Mobile Friendly</small>
+                                <small class="text-primary fw-bold">100%</small>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="d-flex justify-content-between">
+                                <small>Load Speed</small>
+                                <small class="text-info fw-bold">1.2s</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-success mt-4">
+                <i class="fas fa-rocket me-2"></i>
+                <strong>Ready to Deploy!</strong> This template can be live in under 60 seconds.
+            </div>
+        </div>
+    `;
+    
+    $('#niche-preview-content').html(previewContent);
+    $('#deploy-selected-niche').data('niche', nicheData.niche);
+}
+
+function deployNiche(nicheSlug, nicheName) {
+    showLoading();
+    
+    // Simulate deployment process
+    setTimeout(() => {
+        hideLoading();
+        
+        const deploymentData = {
+            niche: nicheName,
+            site_url: `https://${nicheSlug}.salesstorm-deploy.com`,
+            deployment_id: Math.floor(Math.random() * 9999) + 1000,
+            deployed_at: new Date().toLocaleString()
+        };
+        
+        showDeploymentSuccess(deploymentData);
+    }, 2000);
+}
+
+function showDeploymentSuccess(data) {
+    const successContent = `
+        <div class="deployment-success">
+            <div class="text-center mb-4">
+                <i class="fas fa-rocket text-success mb-3" style="font-size: 3rem;"></i>
+                <h4>${data.niche} Deployed Successfully!</h4>
+                <p class="text-muted">Your niche template is now live and ready to convert.</p>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6>Deployment ID: <span class="text-primary">#${data.deployment_id}</span></h6>
+                </div>
+                <div class="col-md-6">
+                    <h6>Deployed: <span class="text-muted">${data.deployed_at}</span></h6>
+                </div>
+            </div>
+            
+            <div class="card border-0 bg-light mb-4">
+                <div class="card-body">
+                    <h6 class="mb-2">Your Live Site URL:</h6>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="${data.site_url}" readonly>
+                        <button class="btn btn-outline-primary" type="button" onclick="copyToClipboard('${data.site_url}')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <h6>What's Next:</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Your ${data.niche} template is live and optimized</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>SSL certificate automatically configured</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Mobile optimization enabled</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Analytics tracking activated</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    $('#deploy-success-content').html(successContent);
+    $('#view-deployed-niche').data('url', data.site_url);
+    $('#deploySuccessModal').modal('show');
+}
+
+// Copy to clipboard function
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        showAlert('success', 'URL copied to clipboard!');
+    });
+}
+
+// View deployed niche
+$(document).on('click', '#view-deployed-niche', function() {
+    const url = $(this).data('url');
+    window.open(url, '_blank');
+});
+
+// Deploy from preview modal
+$(document).on('click', '#deploy-selected-niche', function() {
+    const niche = $(this).data('niche');
+    $('#nichePreviewModal').modal('hide');
+    deployNiche(niche.toLowerCase().replace(' ', '-'), niche);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}Commission Activator - SalesStorm AI{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4 fade-in">
+    <h1 class="h2 mb-0">
+        <i class="fas fa-link text-success me-2"></i>
+        Commission Activator
+    </h1>
+    <p class="text-muted">Turn any affiliate link into a high-converting promo page instantly</p>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-rocket text-success me-2"></i>
+                    Activate Your Commission Link
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="commission-activator-form">
+                    <div class="mb-4">
+                        <label for="affiliate_link" class="form-label fw-semibold">Affiliate Link</label>
+                        <input type="url" class="form-control form-control-lg" id="affiliate_link" name="affiliate_link" 
+                               placeholder="https://your-affiliate-link.com/ref/yourname" required>
+                        <div class="form-text">Paste any affiliate link to generate a professional promo page</div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12 col-md-6">
+                            <label for="template_style" class="form-label fw-semibold">Template Style</label>
+                            <select class="form-select" id="template_style" name="template_style">
+                                <option value="vsl">High-Converting VSL</option>
+                                <option value="webinar">Webinar Registration</option>
+                                <option value="product">Product Showcase</option>
+                                <option value="minimal">Minimal Landing</option>
+                                <option value="testimonial">Testimonial Focus</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="color_scheme" class="form-label fw-semibold">Color Scheme</label>
+                            <select class="form-select" id="color_scheme" name="color_scheme">
+                                <option value="blue">Professional Blue</option>
+                                <option value="green">Success Green</option>
+                                <option value="orange">Energy Orange</option>
+                                <option value="purple">Premium Purple</option>
+                                <option value="red">Urgent Red</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Page Features</label>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="countdown_timer" checked>
+                                    <label class="form-check-label" for="countdown_timer">
+                                        Countdown Timer
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="exit_intent" checked>
+                                    <label class="form-check-label" for="exit_intent">
+                                        Exit-Intent Popup
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="social_proof" checked>
+                                    <label class="form-check-label" for="social_proof">
+                                        Social Proof Notifications
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="mobile_optimized" checked>
+                                    <label class="form-check-label" for="mobile_optimized">
+                                        Mobile Optimization
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success btn-lg px-5">
+                        <i class="fas fa-magic me-2"></i>
+                        Generate Promo Page
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-chart-line text-success me-2"></i>
+                    Conversion Boosters
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="booster-item mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-clock text-warning me-2"></i>
+                        <div>
+                            <small class="fw-semibold d-block">Scarcity Timers</small>
+                            <small class="text-muted">+32% conversion boost</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="booster-item mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-users text-info me-2"></i>
+                        <div>
+                            <small class="fw-semibold d-block">Social Proof</small>
+                            <small class="text-muted">+28% trust increase</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="booster-item mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-mobile-alt text-primary me-2"></i>
+                        <div>
+                            <small class="fw-semibold d-block">Mobile First</small>
+                            <small class="text-muted">+45% mobile conversions</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="booster-item">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-mouse-pointer text-danger me-2"></i>
+                        <div>
+                            <small class="fw-semibold d-block">Exit Intent</small>
+                            <small class="text-muted">+15% recovered visitors</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-0 mt-4 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-history text-primary me-2"></i>
+                    Recent Activations
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="activation-item mb-3">
+                    <small class="text-muted d-block">ClickFunnels Promo</small>
+                    <small class="text-success">Live • 12.5% CVR</small>
+                </div>
+                <div class="activation-item mb-3">
+                    <small class="text-muted d-block">Shopify Training</small>
+                    <small class="text-success">Live • 8.9% CVR</small>
+                </div>
+                <div class="activation-item">
+                    <small class="text-muted d-block">Email Marketing Course</small>
+                    <small class="text-warning">Testing</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="activationSuccessModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Commission Link Activated!
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="activation-results">
+                    <!-- Results will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="copy-promo-url">
+                    <i class="fas fa-copy me-2"></i>
+                    Copy Promo URL
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('#commission-activator-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            affiliate_link: $('#affiliate_link').val(),
+            template_style: $('#template_style').val(),
+            color_scheme: $('#color_scheme').val(),
+            countdown_timer: $('#countdown_timer').is(':checked'),
+            exit_intent: $('#exit_intent').is(':checked'),
+            social_proof: $('#social_proof').is(':checked'),
+            mobile_optimized: $('#mobile_optimized').is(':checked')
+        };
+        
+        // Show loading
+        showLoading();
+        
+        $.ajax({
+            url: '/api/activator',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                hideLoading();
+                if (response.success) {
+                    showAlert('success', response.message);
+                    showActivationResults(response.promo);
+                }
+            },
+            error: function() {
+                hideLoading();
+                showAlert('danger', 'Failed to activate commission link. Please try again.');
+            }
+        });
+    });
+    
+    // Copy promo URL functionality
+    $(document).on('click', '#copy-promo-url', function() {
+        const promoUrl = $(this).data('url');
+        navigator.clipboard.writeText(promoUrl).then(function() {
+            showAlert('success', 'Promo URL copied to clipboard!');
+        });
+    });
+});
+
+function showActivationResults(promo) {
+    const resultsContent = `
+        <div class="activation-results">
+            <div class="alert alert-success mb-4">
+                <h6 class="mb-2">🎉 Your Promo Page is Ready!</h6>
+                <p class="mb-0">Your high-converting promo page has been generated and is ready to drive commissions.</p>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6>Promo ID: <span class="text-primary">#${promo.id}</span></h6>
+                </div>
+                <div class="col-md-6">
+                    <h6>Created: <span class="text-muted">${promo.created_at}</span></h6>
+                </div>
+            </div>
+            
+            <div class="card border-0 bg-light mb-4">
+                <div class="card-body">
+                    <h6 class="mb-2">Your Promo URL:</h6>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="${promo.promo_url}" readonly>
+                        <button class="btn btn-outline-primary" type="button" onclick="copyToClipboard('${promo.promo_url}')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Template: <span class="text-info">${promo.template_type}</span></h6>
+                </div>
+                <div class="col-md-6">
+                    <h6>Status: <span class="text-success">Live & Active</span></h6>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <h6>Next Steps:</h6>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Share your promo URL on social media</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Add to your email campaigns</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Monitor performance in dashboard</li>
+                    <li><i class="fas fa-check text-success me-2"></i>A/B test different approaches</li>
+                </ul>
+            </div>
+        </div>
+    `;
+    
+    $('#activation-results').html(resultsContent);
+    $('#copy-promo-url').data('url', promo.promo_url);
+    $('#activationSuccessModal').modal('show');
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        showAlert('success', 'Copied to clipboard!');
+    });
+}
+</script>
+{% endblock %}

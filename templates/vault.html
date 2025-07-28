@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}Bonus Vault - SalesStorm AI{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4 fade-in">
+    <h1 class="h2 mb-0">
+        <i class="fas fa-gift text-warning me-2"></i>
+        Bonus Vault
+    </h1>
+    <p class="text-muted">Exclusive DFY bonuses to supercharge your offers</p>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 fade-in">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12 col-md-3">
+                        <div class="stat-card text-center">
+                            <h3 class="text-primary mb-1">{{ bonuses|length }}</h3>
+                            <small class="text-muted">Available Bonuses</small>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <div class="stat-card text-center">
+                            <h3 class="text-success mb-1">$4,682</h3>
+                            <small class="text-muted">Total Value</small>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <div class="stat-card text-center">
+                            <h3 class="text-info mb-1">1,247</h3>
+                            <small class="text-muted">Downloads</small>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <div class="stat-card text-center">
+                            <h3 class="text-warning mb-1">95%</h3>
+                            <small class="text-muted">Satisfaction</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    {% for bonus in bonuses %}
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="bonus-card card border-0 h-100 fade-in">
+            <div class="card-header bg-transparent border-0 pb-0">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="bonus-icon">
+                        {% if bonus.type == 'Video Course' %}
+                            <i class="fas fa-play-circle text-primary"></i>
+                        {% elif bonus.type == 'Template Pack' %}
+                            <i class="fas fa-file-alt text-success"></i>
+                        {% elif bonus.type == 'Spreadsheet' %}
+                            <i class="fas fa-table text-info"></i>
+                        {% elif bonus.type == 'PDF Guide' %}
+                            <i class="fas fa-book text-warning"></i>
+                        {% elif bonus.type == 'Database' %}
+                            <i class="fas fa-database text-purple"></i>
+                        {% else %}
+                            <i class="fas fa-video text-danger"></i>
+                        {% endif %}
+                    </div>
+                    <span class="badge bg-success">{{ bonus.value }}</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <h6 class="card-title mb-2">{{ bonus.name }}</h6>
+                <p class="card-text text-muted small mb-3">{{ bonus.type }}</p>
+                
+                <div class="bonus-features mb-3">
+                    <small class="text-muted d-block mb-1">
+                        <i class="fas fa-check text-success me-1"></i>
+                        Instant download access
+                    </small>
+                    <small class="text-muted d-block mb-1">
+                        <i class="fas fa-check text-success me-1"></i>
+                        Commercial license included
+                    </small>
+                    <small class="text-muted d-block">
+                        <i class="fas fa-check text-success me-1"></i>
+                        Lifetime updates
+                    </small>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary btn-sm copy-bonus-link" 
+                            data-bonus-id="{{ bonus.id }}" 
+                            data-bonus-name="{{ bonus.name }}">
+                        <i class="fas fa-link me-2"></i>
+                        Copy Bonus Link
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm preview-bonus" 
+                            data-bonus-id="{{ bonus.id }}">
+                        <i class="fas fa-eye me-2"></i>
+                        Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Add Custom Bonus -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card border-0 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-plus-circle text-primary me-2"></i>
+                    Add Custom Bonus
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="custom-bonus-form" class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <input type="text" class="form-control" placeholder="Bonus Name" id="custom-bonus-name" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <input type="text" class="form-control" placeholder="Value (e.g., $297)" id="custom-bonus-value" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <select class="form-select" id="custom-bonus-type" required>
+                            <option value="">Select Type</option>
+                            <option value="Video Course">Video Course</option>
+                            <option value="Template Pack">Template Pack</option>
+                            <option value="PDF Guide">PDF Guide</option>
+                            <option value="Software">Software</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-plus me-2"></i>
+                            Add
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bonus Preview Modal -->
+<div class="modal fade" id="bonusPreviewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-gift text-warning me-2"></i>
+                    Bonus Preview
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="bonus-preview-content">
+                    <!-- Preview content will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="download-bonus">
+                    <i class="fas fa-download me-2"></i>
+                    Download Bonus
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Copy bonus link functionality
+    $('.copy-bonus-link').on('click', function() {
+        const bonusId = $(this).data('bonus-id');
+        const bonusName = $(this).data('bonus-name');
+        const bonusLink = `https://salesstorm-ai.com/bonus/${bonusId}`;
+        
+        navigator.clipboard.writeText(bonusLink).then(function() {
+            showAlert('success', `${bonusName} link copied to clipboard!`);
+        });
+    });
+    
+    // Preview bonus functionality
+    $('.preview-bonus').on('click', function() {
+        const bonusId = $(this).data('bonus-id');
+        showBonusPreview(bonusId);
+    });
+    
+    // Custom bonus form
+    $('#custom-bonus-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const bonusData = {
+            name: $('#custom-bonus-name').val(),
+            value: $('#custom-bonus-value').val(),
+            type: $('#custom-bonus-type').val()
+        };
+        
+        showAlert('success', 'Custom bonus added to your vault!');
+        this.reset();
+    });
+});
+
+function showBonusPreview(bonusId) {
+    const bonusData = {
+        1: {
+            name: 'AI Copywriting Masterclass',
+            description: 'Complete course on AI-powered copywriting techniques',
+            contents: ['10 Video Modules', '50+ Copy Templates', 'AI Prompt Library', 'Case Studies'],
+            preview_image: '/static/img/bonus-preview.jpg'
+        },
+        2: {
+            name: 'High-Converting Email Templates',
+            description: '100+ proven email templates for maximum conversions',
+            contents: ['Welcome Series (7 emails)', 'Sales Sequences (21 emails)', 'Nurture Templates (30 emails)', 'Subject Line Formulas'],
+            preview_image: '/static/img/email-templates.jpg'
+        },
+        3: {
+            name: 'Social Media Content Calendar',
+            description: '12-month content calendar with 1000+ post ideas',
+            contents: ['365 Post Ideas', 'Hashtag Research', 'Engagement Strategies', 'Platform-Specific Tips'],
+            preview_image: '/static/img/content-calendar.jpg'
+        }
+    };
+    
+    const bonus = bonusData[bonusId] || bonusData[1];
+    
+    const previewContent = `
+        <div class="bonus-preview">
+            <div class="text-center mb-4">
+                <i class="fas fa-gift text-warning mb-3" style="font-size: 3rem;"></i>
+                <h4>${bonus.name}</h4>
+                <p class="text-muted">${bonus.description}</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-12">
+                    <h6 class="mb-3">What's Included:</h6>
+                    <ul class="list-unstyled">
+                        ${bonus.contents.map(item => `
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                ${item}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-4">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Ready to use!</strong> This bonus is immediately available for download and use in your campaigns.
+            </div>
+        </div>
+    `;
+    
+    $('#bonus-preview-content').html(previewContent);
+    $('#bonusPreviewModal').modal('show');
+}
+</script>
+{% endblock %}
