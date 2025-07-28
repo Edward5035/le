@@ -1,0 +1,371 @@
+{% extends "base.html" %}
+
+{% block title %}Promoter - SalesStorm AI{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4 fade-in">
+    <h1 class="h2 mb-0">
+        <i class="fas fa-megaphone text-warning me-2"></i>
+        AI Content Promoter
+    </h1>
+    <p class="text-muted">Generate high-converting emails and social media content with AI</p>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-robot text-warning me-2"></i>
+                    AI Content Generator
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="content-generator-form">
+                    <div class="row mb-4">
+                        <div class="col-12 col-md-6">
+                            <label for="niche" class="form-label fw-semibold">Niche/Industry</label>
+                            <select class="form-select" id="niche" name="niche" required>
+                                <option value="">Select your niche...</option>
+                                <option value="Make Money Online">Make Money Online</option>
+                                <option value="Affiliate Marketing">Affiliate Marketing</option>
+                                <option value="Drop Shipping">Drop Shipping</option>
+                                <option value="Digital Marketing">Digital Marketing</option>
+                                <option value="AI Tools">AI Tools & Software</option>
+                                <option value="Health & Fitness">Health & Fitness</option>
+                                <option value="Personal Development">Personal Development</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Cryptocurrency">Cryptocurrency</option>
+                                <option value="Local Business">Local Business</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="content_type" class="form-label fw-semibold">Content Type</label>
+                            <select class="form-select" id="content_type" name="content_type" required>
+                                <option value="both">Emails + Social Posts</option>
+                                <option value="emails">Email Sequences Only</option>
+                                <option value="social">Social Media Only</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="offer_description" class="form-label fw-semibold">Offer Description</label>
+                        <textarea class="form-control" id="offer_description" name="offer_description" rows="3" 
+                                  placeholder="Describe your product/service/offer that you want to promote..." required></textarea>
+                        <div class="form-text">Be specific about benefits, features, and target audience</div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12 col-md-6">
+                            <label for="tone" class="form-label fw-semibold">Tone of Voice</label>
+                            <select class="form-select" id="tone" name="tone">
+                                <option value="professional">Professional</option>
+                                <option value="casual">Casual & Friendly</option>
+                                <option value="urgent">Urgent & Scarcity</option>
+                                <option value="inspirational">Inspirational</option>
+                                <option value="storytelling">Storytelling</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="call_to_action" class="form-label fw-semibold">Call to Action</label>
+                            <input type="text" class="form-control" id="call_to_action" name="call_to_action" 
+                                   placeholder="e.g., Get Started Now, Download Free Guide, Join Today">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Content Options</label>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="include_emojis" checked>
+                                    <label class="form-check-label" for="include_emojis">
+                                        Include Emojis
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="include_hashtags" checked>
+                                    <label class="form-check-label" for="include_hashtags">
+                                        Add Hashtags (Social)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="personalization" checked>
+                                    <label class="form-check-label" for="personalization">
+                                        Personalization Tags
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="multiple_variants" checked>
+                                    <label class="form-check-label" for="multiple_variants">
+                                        Generate Variants
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-warning btn-lg px-5">
+                        <i class="fas fa-magic me-2"></i>
+                        Generate AI Content
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-lightbulb text-warning me-2"></i>
+                    AI Content Tips
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="tip-item mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <small>Use specific product details for better results</small>
+                </div>
+                <div class="tip-item mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <small>Include target audience demographics</small>
+                </div>
+                <div class="tip-item mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <small>Mention key benefits and pain points</small>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <small>Test different tones for your audience</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-0 mt-4 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-chart-bar text-info me-2"></i>
+                    Content Performance
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="performance-item mb-3">
+                    <div class="d-flex justify-content-between">
+                        <small>Email Open Rate</small>
+                        <small class="text-success fw-bold">24.8%</small>
+                    </div>
+                    <div class="progress mt-1" style="height: 4px;">
+                        <div class="progress-bar bg-success" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="performance-item mb-3">
+                    <div class="d-flex justify-content-between">
+                        <small>Click Through Rate</small>
+                        <small class="text-info fw-bold">8.3%</small>
+                    </div>
+                    <div class="progress mt-1" style="height: 4px;">
+                        <div class="progress-bar bg-info" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="performance-item">
+                    <div class="d-flex justify-content-between">
+                        <small>Social Engagement</small>
+                        <small class="text-warning fw-bold">12.1%</small>
+                    </div>
+                    <div class="progress mt-1" style="height: 4px;">
+                        <div class="progress-bar bg-warning" style="width: 90%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Generated Content Modal -->
+<div class="modal fade" id="generatedContentModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-magic text-warning me-2"></i>
+                    Your AI-Generated Content
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="generated-content-tabs">
+                    <!-- Content tabs will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="copy-all-content">
+                    <i class="fas fa-copy me-2"></i>
+                    Copy All Content
+                </button>
+                <button type="button" class="btn btn-warning" id="regenerate-content">
+                    <i class="fas fa-redo me-2"></i>
+                    Regenerate
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('#content-generator-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            niche: $('#niche').val(),
+            content_type: $('#content_type').val(),
+            offer_description: $('#offer_description').val(),
+            tone: $('#tone').val(),
+            call_to_action: $('#call_to_action').val(),
+            include_emojis: $('#include_emojis').is(':checked'),
+            include_hashtags: $('#include_hashtags').is(':checked'),
+            personalization: $('#personalization').is(':checked'),
+            multiple_variants: $('#multiple_variants').is(':checked')
+        };
+        
+        // Show loading
+        showLoading();
+        
+        $.ajax({
+            url: '/api/promoter',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                hideLoading();
+                if (response.success) {
+                    showAlert('success', response.message);
+                    showGeneratedContent(response.emails, response.social_posts, formData.content_type);
+                }
+            },
+            error: function() {
+                hideLoading();
+                showAlert('danger', 'Failed to generate content. Please try again.');
+            }
+        });
+    });
+});
+
+function showGeneratedContent(emails, socialPosts, contentType) {
+    let tabsContent = `
+        <ul class="nav nav-tabs" id="contentTabs" role="tablist">
+    `;
+    
+    if (contentType === 'both' || contentType === 'emails') {
+        tabsContent += `
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="emails-tab" data-bs-toggle="tab" data-bs-target="#emails" type="button" role="tab">
+                    <i class="fas fa-envelope me-2"></i>Email Sequences (${emails.length})
+                </button>
+            </li>
+        `;
+    }
+    
+    if (contentType === 'both' || contentType === 'social') {
+        tabsContent += `
+            <li class="nav-item" role="presentation">
+                <button class="nav-link ${contentType === 'social' ? 'active' : ''}" id="social-tab" data-bs-toggle="tab" data-bs-target="#social" type="button" role="tab">
+                    <i class="fas fa-share-alt me-2"></i>Social Posts (${socialPosts.length})
+                </button>
+            </li>
+        `;
+    }
+    
+    tabsContent += `
+        </ul>
+        <div class="tab-content" id="contentTabsContent">
+    `;
+    
+    if (contentType === 'both' || contentType === 'emails') {
+        tabsContent += `
+            <div class="tab-pane fade show active" id="emails" role="tabpanel">
+                <div class="row g-3 mt-3">
+        `;
+        
+        emails.forEach((email, index) => {
+            tabsContent += `
+                <div class="col-12">
+                    <div class="card border-0 bg-light">
+                        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">Email Sequence #${index + 1}</h6>
+                            <button class="btn btn-sm btn-outline-primary copy-content" data-content="${email.replace(/"/g, '&quot;')}">
+                                <i class="fas fa-copy me-1"></i>Copy
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <pre class="mb-0 text-wrap">${email}</pre>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        tabsContent += `
+                </div>
+            </div>
+        `;
+    }
+    
+    if (contentType === 'both' || contentType === 'social') {
+        tabsContent += `
+            <div class="tab-pane fade ${contentType === 'social' ? 'show active' : ''}" id="social" role="tabpanel">
+                <div class="row g-3 mt-3">
+        `;
+        
+        socialPosts.forEach((post, index) => {
+            tabsContent += `
+                <div class="col-12 col-md-6">
+                    <div class="card border-0 bg-light">
+                        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">Social Post #${index + 1}</h6>
+                            <button class="btn btn-sm btn-outline-primary copy-content" data-content="${post.replace(/"/g, '&quot;')}">
+                                <i class="fas fa-copy me-1"></i>Copy
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">${post}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        tabsContent += `
+                </div>
+            </div>
+        `;
+    }
+    
+    tabsContent += `
+        </div>
+    `;
+    
+    $('#generated-content-tabs').html(tabsContent);
+    $('#generatedContentModal').modal('show');
+    
+    // Add copy functionality
+    $(document).off('click', '.copy-content').on('click', '.copy-content', function() {
+        const content = $(this).data('content');
+        navigator.clipboard.writeText(content).then(function() {
+            showAlert('success', 'Content copied to clipboard!');
+        });
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}AI Storm Builder - SalesStorm AI{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4 fade-in">
+    <h1 class="h2 mb-0">
+        <i class="fas fa-robot text-primary me-2"></i>
+        AI Storm Builder
+    </h1>
+    <p class="text-muted">Create high-converting funnels powered by AI in minutes</p>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-magic text-primary me-2"></i>
+                    Build Your AI Funnel
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="funnel-builder-form">
+                    <div class="mb-4">
+                        <label for="niche" class="form-label fw-semibold">Select Your Niche</label>
+                        <select class="form-select" id="niche" name="niche" required>
+                            <option value="">Choose a niche...</option>
+                            <option value="Make Money Online">Make Money Online</option>
+                            <option value="Affiliate Marketing">Affiliate Marketing</option>
+                            <option value="Drop Shipping">Drop Shipping</option>
+                            <option value="Digital Products">Digital Products</option>
+                            <option value="Freelancing">Freelancing & Services</option>
+                            <option value="AI Tools">AI Tools & Software</option>
+                            <option value="Local Business">Local Business</option>
+                            <option value="Health & Fitness">Health & Fitness</option>
+                            <option value="Personal Development">Personal Development</option>
+                            <option value="Real Estate">Real Estate</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="offer_link" class="form-label fw-semibold">Your Offer Link</label>
+                        <input type="url" class="form-control" id="offer_link" name="offer_link" 
+                               placeholder="https://your-offer-link.com" required>
+                        <div class="form-text">Paste your affiliate or product link here</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">AI Options</label>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="scarcity" checked>
+                                    <label class="form-check-label" for="scarcity">
+                                        Add Scarcity Elements
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="testimonials" checked>
+                                    <label class="form-check-label" for="testimonials">
+                                        Include Testimonials
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="bonuses" checked>
+                                    <label class="form-check-label" for="bonuses">
+                                        Auto-Add Bonuses
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="mobile_optimized" checked>
+                                    <label class="form-check-label" for="mobile_optimized">
+                                        Mobile Optimized
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-robot me-2"></i>
+                        Generate AI Funnel
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-info-circle text-info me-2"></i>
+                    AI Features
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="feature-item mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <small>Proven headline templates</small>
+                </div>
+                <div class="feature-item mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <small>Psychological triggers</small>
+                </div>
+                <div class="feature-item mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <small>Conversion optimization</small>
+                </div>
+                <div class="feature-item mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <small>Mobile responsive</small>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <small>Split-test ready</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-0 mt-4 fade-in">
+            <div class="card-header bg-transparent border-0">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-clock text-warning me-2"></i>
+                    Recent Funnels
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="recent-funnel-item mb-2">
+                    <small class="text-muted d-block">Make Money Online</small>
+                    <small class="text-success">Active • 8.5% CVR</small>
+                </div>
+                <div class="recent-funnel-item mb-2">
+                    <small class="text-muted d-block">AI Tools</small>
+                    <small class="text-success">Active • 12.3% CVR</small>
+                </div>
+                <div class="recent-funnel-item">
+                    <small class="text-muted d-block">Drop Shipping</small>
+                    <small class="text-warning">Draft</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Funnel Preview Modal -->
+<div class="modal fade" id="funnelPreviewModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-robot text-primary me-2"></i>
+                    Your AI-Generated Funnel
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="funnel-preview-content">
+                    <!-- Content will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success">
+                    <i class="fas fa-rocket me-2"></i>
+                    Deploy Funnel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('#funnel-builder-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            niche: $('#niche').val(),
+            offer_link: $('#offer_link').val(),
+            scarcity: $('#scarcity').is(':checked'),
+            testimonials: $('#testimonials').is(':checked'),
+            bonuses: $('#bonuses').is(':checked'),
+            mobile_optimized: $('#mobile_optimized').is(':checked')
+        };
+        
+        // Show loading
+        showLoading();
+        
+        $.ajax({
+            url: '/api/builder',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                hideLoading();
+                if (response.success) {
+                    showAlert('success', response.message);
+                    showFunnelPreview(response.funnel);
+                }
+            },
+            error: function() {
+                hideLoading();
+                showAlert('danger', 'Failed to generate funnel. Please try again.');
+            }
+        });
+    });
+});
+
+function showFunnelPreview(funnel) {
+    const previewContent = `
+        <div class="funnel-preview">
+            <div class="alert alert-success mb-4">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong>Funnel ID:</strong> ${funnel.id} | <strong>Status:</strong> ${funnel.status}
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6>Niche: <span class="text-primary">${funnel.niche}</span></h6>
+                </div>
+                <div class="col-md-6">
+                    <h6>Created: <span class="text-muted">${funnel.created_at}</span></h6>
+                </div>
+            </div>
+            
+            <div class="card border-0 bg-light">
+                <div class="card-header">
+                    <h6 class="mb-0">AI-Generated Copy Preview</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">${funnel.ai_copy}</p>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <h6>Funnel Features:</h6>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Mobile-responsive design</li>
+                    <li><i class="fas fa-check text-success me-2"></i>High-converting headlines</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Built-in scarcity elements</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Social proof integration</li>
+                </ul>
+            </div>
+        </div>
+    `;
+    
+    $('#funnel-preview-content').html(previewContent);
+    $('#funnelPreviewModal').modal('show');
+}
+</script>
+{% endblock %}
